@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    networks:
+      - notefournote-net
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  notefournote:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    networks:
+      - notefournote-net
+    ports:
+      - 8080:8080
+    volumes:
+      - ./backend:/app #live-reload
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5435/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    networks:
+      - notefournote-net
+    ports:
+      - "8081:8080"
+
+networks:
+  notefournote-net:
+    driver: bridge
