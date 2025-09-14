@@ -60,6 +60,13 @@ public class GlobalExceptionHandler {
         return new ErrorResponse("Il corpo della richiesta è mancante o formattato in modo non corretto");
     }
 
+    @ExceptionHandler(InvalidSearchCriteriaException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidSearch(InvalidSearchCriteriaException ex) {
+        log.warn("Query params (or form) are missing: {}", ex.getMessage());
+        return new ErrorResponse("Nessun parametro di ricerca fornito");
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleGenericException(Exception ex) {

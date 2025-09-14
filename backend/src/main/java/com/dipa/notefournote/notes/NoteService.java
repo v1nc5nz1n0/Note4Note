@@ -1,6 +1,7 @@
 package com.dipa.notefournote.notes;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface NoteService {
@@ -16,5 +17,7 @@ public interface NoteService {
     void deleteNote(UUID noteId, String username);
 
     void shareNote(UUID noteId, ShareNoteRequest request, String ownerUsername);
+
+    List<NoteResponse> searchNotes(String text, Set<String> tags, String username);
 
 }
