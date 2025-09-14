@@ -1,9 +1,16 @@
 package com.dipa.notefournote.users;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +24,19 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Tag(name = "1. Users & Authentication", description = "API per la registrazione e l'autenticazione degli utenti")
 public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "Registra un nuovo utente", description = "Crea un nuovo utente nel sistema.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Utente creato con successo"),
+            @ApiResponse(responseCode = "400", description = "Errore di validazione nei dati inviati",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Username già esistente",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping(value = "/register")
     public ResponseEntity<UserRegistrationResponse> register(@Valid @RequestBody UserRegistrationRequest request) {
         log.debug("Received new registration request for user: '{}'", request.username());
@@ -42,6 +58,14 @@ public class UserController {
         return ResponseEntity.created(location).body(responseDto);
     }
 
+    @Operation(summary = "Effettua il login di un utente", description = "Autentica un utente e restituisce un access token e un refresh token.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login effettuato con successo"),
+            @ApiResponse(responseCode = "400", description = "Errore di validazione nei dati inviati",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Credenziali non valide",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest request) {
         log.debug("Received login request for user: '{}'", request.username());
@@ -53,6 +77,12 @@ public class UserController {
         return ResponseEntity.ok(new UserLoginResponse(jwtTokens.accessToken(), jwtTokens.refreshToken()));
     }
 
+    @Operation(summary = "Aggiorna l'access token", description = "Genera un nuovo access token utilizzando un refresh token valido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Token aggiornato con successo"),
+            @ApiResponse(responseCode = "401", description = "Refresh token non valido o scaduto",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/refresh")
     public ResponseEntity<UserLoginResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
         log.debug("Received refresh token request");
