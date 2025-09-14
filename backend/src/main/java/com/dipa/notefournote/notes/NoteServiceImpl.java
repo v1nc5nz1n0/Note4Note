@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -24,6 +24,8 @@ public class NoteServiceImpl implements NoteService {
     private final UserRepository userRepository;
     private final NoteMapper noteMapper;
     private final NoteShareRepository noteShareRepository;
+    private final NoteSearchRepository noteSearchRepository;
+    private final TagRepository tagRepository;
 
     @Override
     @Transactional
@@ -36,8 +38,21 @@ public class NoteServiceImpl implements NoteService {
         final NoteEntity newNote = noteMapper.toEntity(request);
         newNote.setUser(user);
 
-        final NoteEntity savedNote = noteRepository.save(newNote);
-        log.info("Note created successfully for user '{}' with id: {}", username, savedNote.getId());
+        // Persists new tags (if any) before saving the note entity
+        final Set<TagEntity> tags = request.tags().stream()
+                .map(tagName -> tagRepository
+                        .findByName(tagName)
+                        .orElseGet(() -> tagRepository.saveAndFlush(new TagEntity(tagName))))
+                .collect(Collectors.toSet());
+        newNote.setTags(tags);
+
+        final NoteEntity savedNote = noteRepository.saveAndFlush(newNote);
+        log.info("Note created successfully for user '{}' with id: '{}'", username, savedNote.getId());
+
+        log.debug("Synchronizing creation to MongoDB note with id: '{}'", savedNote.getId());
+        final NoteDocument document = noteMapper.toDocument(savedNote);
+        final NoteDocument syncDocument = noteSearchRepository.save(document);
+        log.debug("Synchronized creation to MongoDB note with id: '{}'", syncDocument.getId());
 
         return noteMapper.toResponse(savedNote, username);
     }
@@ -96,14 +111,25 @@ public class NoteServiceImpl implements NoteService {
             throw new NoteAccessDeniedException("Only the owner can update the note");
         }
 
+        // Persists new tags (if any) before saving the note entity
+        final Set<TagEntity> tags = request.tags().stream()
+                .map(tagName -> tagRepository
+                        .findByName(tagName)
+                        .orElseGet(() -> tagRepository.saveAndFlush(new TagEntity(tagName))))
+                .collect(Collectors.toSet());
+        note.setTags(tags);
         note.setTitle(request.title());
         note.setContent(request.content());
 
-        final NoteEntity updatedEntity = noteRepository.save(note);
-        final NoteResponse updatedNote = noteMapper.toResponse(updatedEntity, username);
+        final NoteEntity updatedEntity = noteRepository.saveAndFlush(note);
+
+        log.debug("Synchronizing update to MongoDB note with id: '{}'", updatedEntity.getId());
+        final NoteDocument document = noteMapper.toDocument(updatedEntity);
+        final NoteDocument syncDocument = noteSearchRepository.save(document);
+        log.debug("Synchronized update to MongoDB note with id: '{}'", syncDocument.getId());
 
         log.info("Updated note with id '{}' for user: '{}'", noteId, username);
-        return updatedNote;
+        return noteMapper.toResponse(updatedEntity, username);
     }
 
     @Override
@@ -119,6 +145,11 @@ public class NoteServiceImpl implements NoteService {
         }
 
         noteRepository.delete(note);
+
+        log.debug("Synchronizing deletion to MongoDB note with id: '{}'", noteId);
+        noteSearchRepository.deleteById(noteId.toString());
+        log.debug("Synchronized deletion to MongoDB note with id: '{}'", noteId);
+
 
         log.info("Deleted note with id '{}' for user: '{}'", noteId, username);
     }
@@ -146,9 +177,42 @@ public class NoteServiceImpl implements NoteService {
         }
 
         final NoteShare shareNote = new NoteShare(note, userToShareWith);
+        note.getShares().add(shareNote);
         noteShareRepository.save(shareNote);
+        log.debug("Synchronizing share to MongoDB note with id: '{}'", shareNote.getId());
+        final NoteDocument document = noteMapper.toDocument(note);
+        final NoteDocument syncDocument = noteSearchRepository.save(document);
+        log.debug("Synchronized share to MongoDB note with id: '{}'", syncDocument.getId());
 
         log.info("Shared note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.username());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<NoteResponse> searchNotes(String text, Set<String> tags, String username) {
+        log.info("Searching notes by text: '{}', tags: {}, for user: '{}'", text, tags, username);
+
+        // Searching is performed on MongoDB (results are ordered)
+        final List<NoteDocument> searchResults = noteSearchRepository.searchNotes(text, tags, username);
+        final List<UUID> noteIds = searchResults.stream()
+                .map(doc -> UUID.fromString(doc.getId()))
+                .toList();
+
+        if (noteIds.isEmpty()) return List.of();
+
+        // IDs found on MongoDB are used to query relational database
+        final Map<UUID, NoteEntity> notesMap = noteRepository.findAllById(noteIds).stream()
+                .collect(Collectors.toMap(NoteEntity::getId, Function.identity()));
+
+        // Preserve MongoDB query result order (map acts as intermediate bucket)
+        final List<NoteResponse> matchNotes = noteIds.stream()
+                .map(notesMap::get)
+                .filter(Objects::nonNull)
+                .map(note -> noteMapper.toResponse(note, username))
+                .toList();
+
+        log.info("Found {} notes matching search criteria.", matchNotes.size());
+        return matchNotes;
     }
 
 }

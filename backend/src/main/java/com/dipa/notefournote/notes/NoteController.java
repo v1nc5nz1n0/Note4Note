@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -103,6 +104,21 @@ public class NoteController {
 
         log.debug("Successfully shared note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.username());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<NoteResponse>> searchNotes(
+            @RequestParam(name = "text", required = false) String text,
+            @RequestParam(name = "tags", required = false) Set<String> tags,
+            Authentication authentication) {
+
+        final String username = authentication.getName();
+        log.debug("Received request from user '{}' to search notes with: '{}' (text) | {} (tags)", username, text, tags);
+
+        final List<NoteResponse> results = noteService.searchNotes(text, tags, username);
+
+        log.debug("Successfully search notes for '{}' user with '{}' (text) | {} (tags): {}", username, text, tags, results);
+        return ResponseEntity.ok(results);
     }
 
 }

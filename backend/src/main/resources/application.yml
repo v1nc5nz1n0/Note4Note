@@ -1,6 +1,9 @@
 spring:
   application:
     name: notefournote
+  data:
+    mongodb:
+      auto-index-creation: true
 
 management:
   endpoints:
