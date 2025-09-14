@@ -67,4 +67,18 @@ public class GlobalExceptionHandler {
         return new ErrorResponse("Si è verificato un errore interno inaspettato");
     }
 
+    @ExceptionHandler(NoteNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNoteNotFound(NoteNotFoundException ex) {
+        log.warn("Note not found: {}", ex.getMessage());
+        return new ErrorResponse("Nota non trovata");
+    }
+
+    @ExceptionHandler(NoteAccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleNoteAccessDenied(NoteAccessDeniedException ex) {
+        log.warn("Note access denied: {}", ex.getMessage());
+        return new ErrorResponse("Accesso non autorizzato");
+    }
+
 }
