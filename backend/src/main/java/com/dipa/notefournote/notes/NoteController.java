@@ -90,4 +90,19 @@ public class NoteController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{noteId}/share")
+    public ResponseEntity<Void> shareNote(
+            @PathVariable UUID noteId,
+            @Valid @RequestBody ShareNoteRequest request,
+            Authentication authentication) {
+
+        final String ownerUsername = authentication.getName();
+        log.debug("Received request from user '{}' to share note '{}' with: '{}'", ownerUsername, noteId, request.username());
+
+        noteService.shareNote(noteId, request, ownerUsername);
+
+        log.debug("Successfully shared note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.username());
+        return ResponseEntity.ok().build();
+    }
+
 }

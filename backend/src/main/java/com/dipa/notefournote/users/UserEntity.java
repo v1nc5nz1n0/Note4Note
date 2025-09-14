@@ -1,6 +1,7 @@
 package com.dipa.notefournote.users;
 
 import com.dipa.notefournote.notes.NoteEntity;
+import com.dipa.notefournote.notes.NoteShare;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,5 +30,8 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     private Set<NoteEntity> notes = new HashSet<>();
+
+    @OneToMany(mappedBy = "sharedWithUser")
+    private Set<NoteShare> receivedShares = new HashSet<>();
 
 }
