@@ -15,4 +15,6 @@ public interface NoteService {
 
     void deleteNote(UUID noteId, String username);
 
+    void shareNote(UUID noteId, ShareNoteRequest request, String ownerUsername);
+
 }
