@@ -1,0 +1,2329 @@
+{
+	"info": {
+		"_postman_id": "88342340-b5e8-4904-adb5-0683fa588528",
+		"name": "Note4Note",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46287669",
+		"_collection_link": "https://vincenzo-2400264.postman.co/workspace/Vincenzo's-Workspace~ef1c2b32-58c1-459e-8c0a-7b6525ab0dad/collection/46287669-88342340-b5e8-4904-adb5-0683fa588528?action=share&source=collection_link&creator=46287669"
+	},
+	"item": [
+		{
+			"name": "Health",
+			"item": [
+				{
+					"name": "HealtCheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/actuator/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"actuator",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"usernameValue1\",\n    \"password\": \"passwordValue1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/users/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"usernameValue\",\n    \"password\": \"passwordValue\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshToken",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlIiwiaWF0IjoxNzU3ODAyMDQ2LCJleHAiOjE3NTc4MDIwNDZ9.kDoLR0UHdbEC4z_EwxVnjHGMlMBjcgyzd5BB_q6cNGQbfOaokVZSTMwcE0sh6g1suiL1I1QlgsQPU9I5MrOvPg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users/refresh",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Note",
+			"item": [
+				{
+					"name": "CreateNote",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"La mia prima nota\",\n    \"content\": \"La mia prima nota è stonata\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/notes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateNote Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"La mia prima nota\",\n    \"content\": \"La mia prima nota è stonata\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/notes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateNote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlMyIsImlhdCI6MTc1Nzg0MDIzMCwiZXhwIjoxNzU3ODQzODMwLCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.28cuKGFHNpcBHk4nkiOssGJkTH3iR0Qw-oks0I12Rl-1TdZcHB0nBA0vUiEC8dUwN-OgWwPglsmwb6S8i-rTpQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"La mia seconda nota\",\n    \"content\": \"La mia seconda nota pure è diventata stonata\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/notes/088ef5ec-2707-42ed-8633-404ee9e8205a",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"088ef5ec-2707-42ed-8633-404ee9e8205a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetNote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlIiwiaWF0IjoxNzU3ODAyMDQ2LCJleHAiOjE3NTc4MDIwNDZ9.eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlMyIsImlhdCI6MTc1Nzg0MDIzMCwiZXhwIjoxNzU3ODQzODMwLCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.28cuKGFHNpcBHk4nkiOssGJkTH3iR0Qw-oks0I12Rl-1TdZcHB0nBA0vUiEC8dUwN-OgWwPglsmwb6S8i-rTpQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/notes/088ef5ec-2707-42ed-8633-404ee9e8205a",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"088ef5ec-2707-42ed-8633-404ee9e8205a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetNote Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlIiwiaWF0IjoxNzU3ODAyMDQ2LCJleHAiOjE3NTc4MDIwNDZ9.eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlMyIsImlhdCI6MTc1Nzg0MDIzMCwiZXhwIjoxNzU3ODQzODMwLCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.28cuKGFHNpcBHk4nkiOssGJkTH3iR0Qw-oks0I12Rl-1TdZcHB0nBA0vUiEC8dUwN-OgWwPglsmwb6S8i-rTpQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/notes/088ef5ec-2707-42ed-8633-404ee9e8205a",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"088ef5ec-2707-42ed-8633-404ee9e8205a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllNotes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/notes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllNotes Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlMiIsImlhdCI6MTc1Nzg0NDE0NywiZXhwIjoxNzU3ODQ3NzQ3LCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.wYykHCjF3e57G_XKA6ZaPZ48W3T42Bo3Pph73s5bImk--R-WKIjTC3hrRiZEtO98BhwX0G8noELeMzZVXOluDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/notes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteNote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlMyIsImlhdCI6MTc1Nzg0MDIzMCwiZXhwIjoxNzU3ODQzODMwLCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.28cuKGFHNpcBHk4nkiOssGJkTH3iR0Qw-oks0I12Rl-1TdZcHB0nBA0vUiEC8dUwN-OgWwPglsmwb6S8i-rTpQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/notes/3e360934-d869-49a5-abb0-aee2ac209920",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"3e360934-d869-49a5-abb0-aee2ac209920"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShareNote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlMiIsImlhdCI6MTc1Nzg0NDE0NywiZXhwIjoxNzU3ODQ3NzQ3LCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.wYykHCjF3e57G_XKA6ZaPZ48W3T42Bo3Pph73s5bImk--R-WKIjTC3hrRiZEtO98BhwX0G8noELeMzZVXOluDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/notes/8f30d7a4-8fd7-49b0-9116-7df24dac1a01/share",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"8f30d7a4-8fd7-49b0-9116-7df24dac1a01",
+								"share"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SearchNote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VybmFtZVZhbHVlMiIsImlhdCI6MTc1Nzg2NDc0NiwiZXhwIjoxNzU3ODY4MzQ2LCJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.86oOZuQCMr--7pG_5mbmAiDYm5sANGtEaIa9BywUhzY01cplTll0MBYO7_rpajjU1DbkfRGFYUiTM1l1jXABMw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/notes/search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "1. Autenticazione",
+			"item": [
+				{
+					"name": "Registrazione utente 'pippo'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"pippo\",\n    \"password\": \"pippo123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login utente 'pippo'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains accessToken and refreshToken\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"accessToken\");",
+									"    pm.expect(responseJson).to.have.property(\"refreshToken\");",
+									"",
+									"    // Save accessToken in an environment variable with the convention username_accessToken",
+									"    const username = \"pippo\"; // Replace with the actual username used in the request",
+									"    pm.environment.set(`${username}_accessToken`, responseJson.accessToken);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"pippo\",\n    \"password\": \"pippo123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrazione utente 'pluto'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"pluto\",\n    \"password\": \"pluto123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login utente 'pluto'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains accessToken and refreshToken\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"accessToken\");",
+									"    pm.expect(responseJson).to.have.property(\"refreshToken\");",
+									"",
+									"    // Save accessToken in an environment variable with the convention username_accessToken",
+									"    const username = \"pluto\"; // Replace with the actual username used in the request",
+									"    pm.environment.set(`${username}_accessToken`, responseJson.accessToken);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"pluto\",\n    \"password\": \"pluto123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrazione utente 'paperino'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"paperino\",\n    \"password\": \"paperino123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login utente 'paperino'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains accessToken and refreshToken\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"accessToken\");",
+									"    pm.expect(responseJson).to.have.property(\"refreshToken\");",
+									"",
+									"    // Save accessToken in an environment variable with the convention username_accessToken",
+									"    const username = \"paperino\"; // Replace with the actual username used in the request",
+									"    pm.environment.set(`${username}_accessToken`, responseJson.accessToken);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"paperino\",\n    \"password\": \"paperino123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Creazione note",
+			"item": [
+				{
+					"name": "Creazione nota 1 'pippo'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota1_pippo\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pippo\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 1 per alimenti\",\n    \"content\": \"Comprare pane e insalata\",\n    \"tags\": [\n        \"ALIMENTARI\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 2 'pippo'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota2_pippo\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pippo\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 2 per alimenti\",\n    \"content\": \"Comprare latte e uova\",\n    \"tags\": [\n        \"ALIMENTARI\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 3 'pippo'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota3_pippo\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pippo\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 3 per ordine cartucce stampante\",\n    \"content\": \"Comprare cartucce stampante XP-7100\",\n    \"tags\": [\n        \"AMAZON\", \"ONLINE\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 4 'pippo'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota4_pippo\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pippo\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 4 per carburante\",\n    \"content\": \"Ricarica carburante Kia Picanto\",\n    \"tags\": [\n        \"CARBURANTE\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 1 'pluto'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota1_pluto\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 1 per festa\",\n    \"content\": \"Comprare candeline zio Paperone\",\n    \"tags\": [\n        \"PARTY\", \"FESTA\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 2 'pluto'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota2_pluto\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 2 per festa\",\n    \"content\": \"Comprare spumante per la festa di zio Paperone\",\n    \"tags\": [\n        \"PARTY\", \"FESTA\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 3 'pluto'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota3_pluto\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 3 per barbiere\",\n    \"content\": \"Taglio e shampoo per la festa di zio Paperone\",\n    \"tags\": [\n        \"BARBIERE\", \"BELLEZZA\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 1 'paperino'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota1_paperino\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"paperino\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 1 per festa\",\n    \"content\": \"Comprare torta per la festa di zio Paperone\",\n    \"tags\": [\n        \"PARTY\", \"FESTA\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 2 'paperino'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota2_paperino\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"paperino\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 2 per lavanderia\",\n    \"content\": \"Ritirare piumone invernale lavanderia Alfa\",\n    \"tags\": [\n        \"LAVANDERIA\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creazione nota 3 'paperino'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"// Assuming a successful creation, we can check for the presence of a response body",
+									"pm.test(\"Response body is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if the response has a location header indicating the new resource",
+									"pm.test(\"Response has Location header\", function () {",
+									"    pm.expect(pm.response.headers.has(\"Location\")).to.be.true;",
+									"});",
+									"",
+									"// Save the note ID from the response body into an environment variable",
+									"const responseBody = pm.response.json();",
+									"pm.environment.set(\"id_nota1_paperino\", responseBody.id);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"paperino\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nota 3 per spedizione\",\n    \"content\": \"Spedire fotolibro di Pippo a Pluto\",\n    \"tags\": [\n        \"SPEDIZIONE\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Condivisione e permessi",
+			"item": [
+				{
+					"name": "Condivisione nota 1 da 'pluto' a 'paperino'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usernames\": [\"paperino\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/{{id_nota1_pluto}}/share",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"{{id_nota1_pluto}}",
+								"share"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Condivisione nota 2 da 'pluto' a 'paperino'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usernames\": [\"paperino\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/{{id_nota2_pluto}}/share",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"{{id_nota2_pluto}}",
+								"share"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Condivisione nota 2 da 'pluto' a 'pippo'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usernames\": [\"pippo\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/{{id_nota2_pluto}}/share",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"{{id_nota2_pluto}}",
+								"share"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Condivisione nota non propria da 'pluto' a 'paperino' (Test scenario errore non autorizzato)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.expect(pm.response.code).to.equal(403);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usernames\": [\"paperino\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/{{id_nota1_pippo}}/share",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"{{id_nota1_pippo}}",
+								"share"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Condivisione nota non propria da 'pluto' a 'paperino' (Test scenario errore non trovata)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.expect(pm.response.code).to.equal(404);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usernames\": [\"paperino\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/55c9a880-0d5b-498e-9d8a-17bc220f6600/share",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"55c9a880-0d5b-498e-9d8a-17bc220f6600",
+								"share"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Condivisione nota 3 da 'pluto' a 'pippo' e 'paperino'",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usernames\": [\"pippo\", \"paperino\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/{{id_nota3_pluto}}/share",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"{{id_nota3_pluto}}",
+								"share"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Ricerca e recupero",
+			"item": [
+				{
+					"name": "Ricerca con target su nota propria ('pippo')",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pippo\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "text",
+									"value": "pane",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/search",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ricerca con target su nota condivisa ('pluto')",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "text",
+									"value": "candeline",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/search",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ricerca mediante tag ('paperino')",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"paperino\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tags",
+									"value": "FESTA",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/search",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recupero nota singola ('pluto')",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes/{{id_nota1_pluto}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"{{id_nota1_pluto}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recupero note utente ('pluto')",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set the Authorization header with Bearer token",
+									"const username = \"pluto\";",
+									"const accessTokenKey = username + \"_accessToken\";",
+									"const accessToken = pm.environment.get(accessTokenKey);",
+									"",
+									"if (accessToken) {",
+									"    pm.request.headers.add({",
+									"        key: 'Authorization',",
+									"        value: `Bearer ${accessToken}`",
+									"    });",
+									"} else {",
+									"    console.error('Access token not found in environment variables.');",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/notes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
