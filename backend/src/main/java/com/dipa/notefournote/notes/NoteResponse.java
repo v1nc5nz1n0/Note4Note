@@ -17,6 +17,6 @@ public record NoteResponse(
         LocalDateTime updatedAt,
         String ownerUsername,
         NoteOwnership ownership,
-        Set<String> sharedWith,
+        Set<String> sharedWithUsernames,
         Set<String> tags
 ) {}

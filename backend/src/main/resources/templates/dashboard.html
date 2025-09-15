@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Note4Note</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .note-card { cursor: pointer; transition: border-color 0.2s; height: 100%; }
+        .note-card:hover { border-color: #0d6efd; }
+        .tag { font-size: 0.8em; }
+        #owned-notes-section h3 { color: #0d6efd; border-bottom: 2px solid #0d6efd; padding-bottom: 5px; }
+        #shared-by-me-section h3 { color: #198754; border-bottom: 2px solid #198754; padding-bottom: 5px; }
+        #shared-with-me-section h3 { color: #fd7e14; border-bottom: 2px solid #fd7e14; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">Note4Note</a>
+        <div id="user-info" class="navbar-text text-white-50 mx-auto"></div>
+        <button class="btn btn-danger" id="logout-button">Logout</button>
+    </div>
+</nav>
+
+<div class="container-fluid mt-4 px-4">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <form id="search-form" class="row g-3 align-items-center">
+                <div class="col"><input type="text" class="form-control" id="search-text" placeholder="Cerca per testo..."></div>
+                <div class="col"><input type="text" class="form-control" id="search-tags" placeholder="Filtra per tag (es. Lavoro,Spesa)"></div>
+                <div class="col-auto"><button type="submit" class="btn btn-primary">Cerca</button></div>
+                <div class="col-auto"><button type="button" class="btn btn-outline-secondary" id="reset-search-btn">Mostra Tutte</button></div>
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#note-form-modal" id="create-note-btn">+ Crea Nuova Nota</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <section id="owned-notes-section" class="col-md-4 mb-5"><h3>Le Mie Note</h3><div id="owned-notes-container" class="row"></div></section>
+        <section id="shared-by-me-section" class="col-md-4 mb-5"><h3>Condivise da Me</h3><div id="shared-by-me-container" class="row"></div></section>
+        <section id="shared-with-me-section" class="col-md-4 mb-5"><h3>Condivise con Me</h3><div id="shared-with-me-container" class="row"></div></section>
+    </div>
+</div>
+
+<div class="modal fade" id="note-detail-modal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="detail-modal-title"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div id="detail-modal-content" style="white-space: pre-wrap;"></div><hr><div id="note-extra-details" class="mb-3"></div><h6 class="mt-4">Condividi con altri utenti</h6><form id="share-form"><div class="input-group"><input type="text" class="form-control" id="share-usernames" placeholder="utente1,utente2..." required><button class="btn btn-outline-secondary" type="submit">Condividi</button></div><div id="share-feedback" class="form-text mt-2"></div></form></div></div></div></div>
+<div class="modal fade" id="note-form-modal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="note-form"><div class="modal-header"><h5 class="modal-title" id="form-modal-title">Crea Nuova Nota</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="note-id"><div class="mb-3"><label for="note-title" class="form-label">Titolo</label><input type="text" class="form-control" id="note-title" required></div><div class="mb-3"><label for="note-content" class="form-label">Contenuto</label><textarea class="form-control" id="note-content" rows="5" required></textarea></div><div class="mb-3"><label for="note-tags" class="form-label">Tag (separati da virgola)</label><input type="text" class="form-control" id="note-tags"></div><div class="mb-3"><label for="note-share-with" class="form-label">Condividi con (username separati da virgola)</label><input type="text" class="form-control" id="note-share-with" placeholder="utente1,utente2"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button><button type="submit" class="btn btn-primary">Salva Nota</button></div></form></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Token management and API setup (TODO for refreshing token)
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            console.log('No access token found, redirecting to login');
+            window.location.href = '/login';
+            return;
+        }
+        const apiHeaders = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` };
+        const noteFormModal = new bootstrap.Modal(document.getElementById('note-form-modal'));
+        const detailModal = new bootstrap.Modal(document.getElementById('note-detail-modal'));
+        let noteData = null;
+
+        // JWT parsing utility
+        const parseJwt = (token) => {
+            try { return JSON.parse(atob(token.split('.')[1])); }
+            catch (e) {
+                console.warn('Failed to parse JWT token');
+                return null;
+            }
+        };
+
+        const formatDate = (dateString, options = {}) => {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('it-IT', options).format(date);
+        };
+
+        // Trasforma URLs in link cliccabili
+        const linkify = (text) => {
+            if (!text) return '';
+            const urlRegex = /((https?:\/\/)|(www\.))[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]/ig;
+            return text.replace(urlRegex, (url) => {
+                const properUrl = url.startsWith('www.') ? `http://${url}` : url;
+                return `<a href="${properUrl}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            });
+        };
+
+        const fetchNotes = async (endpoint = '/api/v1/notes') => {
+            console.log('Fetching notes from:', endpoint);
+            try {
+                const response = await fetch(endpoint, { headers: apiHeaders });
+                if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+                const notes = await response.json();
+                console.log('Loaded', notes.length, 'notes');
+                render(notes);
+            } catch (error) {
+                console.error("Failed to fetch notes:", error);
+                render([]);
+            }
+        };
+
+        const render = (notes) => {
+            const containers = {
+                OWNED: document.getElementById('owned-notes-container'),
+                SHARED_BY_ME: document.getElementById('shared-by-me-container'),
+                SHARED_WITH_ME: document.getElementById('shared-with-me-container')
+            };
+            Object.values(containers).forEach(c => c.innerHTML = '');
+
+            const noteCounts = { OWNED: 0, SHARED_BY_ME: 0,  SHARED_WITH_ME: 0 };
+            if (notes && notes.length > 0) {
+                notes.forEach(note => {
+                    const container = containers[note.ownership];
+                    if (container) {
+                        let badgeClass = '', badgeText = '';
+                        switch (note.ownership) {
+                            case 'OWNED': badgeClass = 'bg-primary'; badgeText = 'Mia'; break;
+                            case 'SHARED_BY_ME': badgeClass = 'bg-success'; badgeText = 'Condivisa da me'; break;
+                            case 'SHARED_WITH_ME': badgeClass = 'bg-warning text-dark'; badgeText = 'Condivisa con me'; break;
+                        }
+                        const tagsHtml = note.tags.map(tag => `<span class="badge bg-secondary me-1 tag">${tag}</span>`).join('');
+                        const linkedContent = linkify(note.content.substring(0, 100) + (note.content.length > 100 ? '...' : ''));
+                        const lastUpdated = formatDate(note.updatedAt, { day: 'numeric', month: 'short' });
+                        container.innerHTML += `
+                            <div class="col-12 mb-3">
+                                <div class="card note-card" data-note-id="${note.id}">
+                                    <div class="card-body">
+                                        <h5 class="card-title d-flex justify-content-between align-items-center">
+                                            ${note.title} <span class="badge ${badgeClass} ms-2">${badgeText}</span>
+                                        </h5>
+                                        <p class="card-text text-muted">${linkedContent}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>${tagsHtml}</div>
+                                            <small class="text-muted" title="${formatDate(note.updatedAt, {dateStyle: 'full'})}">${lastUpdated}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        noteCounts[note.ownership]++;
+                    }
+                });
+            }
+
+            Object.keys(containers).forEach(key => {
+                if (noteCounts[key] === 0) {
+                    containers[key].innerHTML = `<div class="col-12"><p class="text-muted fst-italic">Nessuna nota in questa sezione.</p></div>`;
+                }
+            });
+        };
+
+        // Form and interaction handlers
+        document.getElementById('search-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const textEl = document.getElementById('search-text');
+            const tagsEl = document.getElementById('search-tags');
+            const text = textEl.value.trim();
+            const tags = tagsEl.value.trim();
+
+            if (!text && !tags) {
+                console.log('Empty search attempted');
+                [textEl, tagsEl].forEach(el => {
+                    el.classList.add('shake-error');
+                    setTimeout(() => el.classList.remove('shake-error'), 820);
+                });
+                return;
+            }
+            const params = new URLSearchParams();
+            if (text) params.append('text', text);
+            if (tags) params.append('tags', tags);
+            fetchNotes(`/api/v1/notes/search?${params.toString()}`);
+        });
+
+        document.getElementById('reset-search-btn').addEventListener('click', () => {
+            document.getElementById('search-form').reset();
+            fetchNotes();
+        });
+
+        document.getElementById('logout-button').addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '/login';
+        });
+
+        document.addEventListener('click', async (e) => {
+            const card = e.target.closest('.note-card');
+            if (!card) return;
+
+            try {
+                const noteId = card.dataset.noteId;
+                const response = await fetch(`/api/v1/notes/${noteId}`, { headers: apiHeaders });
+                if (!response.ok) throw new Error('Impossibile caricare i dettagli');
+
+                const currentNote = await response.json();
+                noteData = currentNote;
+
+                document.getElementById('detail-modal-title').textContent = currentNote.title;
+                document.getElementById('detail-modal-content').innerHTML = linkify(currentNote.content);
+
+                const detailsContainer = document.getElementById('note-extra-details');
+                const tagsDetails = currentNote.tags.length > 0 ? currentNote.tags.map(tag => `<span class="badge bg-secondary me-1">${tag}</span>`).join('') : 'Nessuno';
+                const sharedWithDetails = currentNote.sharedWithUsernames.length > 0 ? currentNote.sharedWithUsernames.map(u => `<span class="badge bg-info text-dark me-1">${u}</span>`).join('') : 'Nessuno';
+
+                detailsContainer.innerHTML = `
+                    <p class="mb-1"><small><strong><i class="bi bi-tags"></i> Tags:</strong> ${tagsDetails}</small></p>
+                    <p class="mb-1"><small><strong><i class="bi bi-people"></i> Condivisa con:</strong> ${sharedWithDetails}</small></p>
+                    <p class="mb-1"><small><strong><i class="bi bi-calendar-plus"></i> Creata il:</strong> ${formatDate(currentNote.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}</small></p>
+                    <p class="mb-0"><small><strong><i class="bi bi-calendar-check"></i> Ultima modifica:</strong> ${formatDate(currentNote.updatedAt, { dateStyle: 'medium', timeStyle: 'short' })}</small></p>
+                `;
+
+                document.getElementById('share-form').reset();
+                const feedbackEl = document.getElementById('share-feedback');
+                feedbackEl.textContent = '';
+                feedbackEl.className = 'form-text mt-2';
+
+                detailModal.show();
+            } catch (error) {
+                console.error("Failed to open note detail:", error);
+            }
+        });
+
+        document.getElementById('create-note-btn').addEventListener('click', () => {
+            document.getElementById('note-form').reset();
+            document.getElementById('note-id').value = '';
+            document.getElementById('form-modal-title').textContent = 'Crea Nuova Nota';
+        });
+
+        document.getElementById('note-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const shareWithUsernames = document.getElementById('note-share-with').value.split(',').map(u => u.trim()).filter(Boolean);
+            const formData = {
+                id: document.getElementById('note-id').value || undefined,
+                title: document.getElementById('note-title').value,
+                content: document.getElementById('note-content').value,
+                tags: document.getElementById('note-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+                shareWithUsernames: shareWithUsernames
+            };
+            const isUpdating = !!formData.id;
+            const url = isUpdating ? `/api/v1/notes/${formData.id}` : '/api/v1/notes';
+            const method = isUpdating ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, { method, headers: apiHeaders, body: JSON.stringify(formData) });
+                if (!response.ok) throw new Error('Errore nel salvataggio');
+                noteFormModal.hide();
+                fetchNotes();
+            } catch(error) {
+                console.error("Save note failed:", error);
+            }
+        });
+
+        document.getElementById('share-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const feedbackEl = document.getElementById('share-feedback');
+            feedbackEl.textContent = '';
+            const usernames = document.getElementById('share-usernames').value.split(',').map(u => u.trim()).filter(Boolean);
+
+            if (!noteData || usernames.length === 0) return;
+
+            const alreadySharedUsers = usernames.filter(u => noteData.sharedWithUsernames.includes(u));
+            if (alreadySharedUsers.length > 0) {
+                feedbackEl.textContent = `Nota già condivisa con: ${alreadySharedUsers.join(', ')}.`;
+                feedbackEl.className = 'form-text mt-2 text-warning';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/v1/notes/${noteData.id}/share`, {
+                    method: 'POST',
+                    headers: apiHeaders,
+                    body: JSON.stringify({ usernames: usernames })
+                });
+                if (response.ok) {
+                    feedbackEl.textContent = `Nota condivisa con successo!`;
+                    feedbackEl.className = 'form-text mt-2 text-success';
+                    setTimeout(() => { detailModal.hide(); fetchNotes(); }, 1500);
+                } else {
+                    const data = await response.json();
+                    feedbackEl.textContent = data.message || 'Impossibile condividere la nota.';
+                    feedbackEl.className = 'form-text mt-2 text-danger';
+                }
+            } catch (error) {
+                console.error("Share note failed:", error);
+            }
+        });
+
+        // Initialize dashboard
+        const initializeDashboard = () => {
+            const userInfoContainer = document.getElementById('user-info');
+            const decodedToken = parseJwt(accessToken);
+            const username = decodedToken ? decodedToken.sub : 'Utente';
+            const today = formatDate(new Date(), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            userInfoContainer.innerHTML = `<span><i class="bi bi-person-circle"></i> ${username}</span><span class="mx-2">|</span><span>${today}</span>`;
+            fetchNotes();
+        };
+
+        initializeDashboard();
+    });
+</script>
+</body>
+</html>

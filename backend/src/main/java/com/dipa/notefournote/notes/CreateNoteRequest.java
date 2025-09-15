@@ -15,7 +15,8 @@ public record CreateNoteRequest(
         @Size(min = 10, message = "Il contenuto non può essere inferiore a 10 caratteri.")
         String content,
 
-        Set<String> tags
+        Set<String> tags,
+        Set<String> shareWithUsernames
 ) {
     public CreateNoteRequest {
 
@@ -25,5 +26,7 @@ public record CreateNoteRequest(
                       .map(String::trim)
                       .map(String::toUpperCase)
                       .collect(Collectors.toSet());
+
+        shareWithUsernames = shareWithUsernames == null ? Set.of() : shareWithUsernames;
     }
 }
