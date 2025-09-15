@@ -88,4 +88,11 @@ public class GlobalExceptionHandler {
         return new ErrorResponse("Accesso non autorizzato");
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleUserNotFoundException(UserNotFoundException ex) {
+        log.warn("User not found: {}", ex.getMessage());
+        return new ErrorResponse("Utente non trovato");
+    }
+
 }

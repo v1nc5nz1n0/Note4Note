@@ -12,7 +12,7 @@ public interface NoteMapper {
 
     @Mapping(target = "ownerUsername", ignore = true)
     @Mapping(target = "ownership", ignore = true)
-    @Mapping(target = "sharedWith", ignore = true)
+    @Mapping(target = "sharedWithUsernames", ignore = true)
     @Mapping(source = "tags", target = "tags", qualifiedByName = "mapTagsToNames")
     NoteResponse toResponse(NoteEntity entity);
 
@@ -67,15 +67,12 @@ public interface NoteMapper {
     default NoteResponse toResponse(NoteEntity note, String currentUsername) {
 
         final String ownerUsername = note.getUser().getUsername();
-        final NoteOwnership ownership = ownerUsername.equals(currentUsername)
-                ? NoteOwnership.OWNED
-                : NoteOwnership.SHARED_WITH_ME;
 
-        final Set<String> sharedWithUsernames = ownership == NoteOwnership.OWNED
-                ? note.getShares().stream()
-                                  .map(share -> share.getSharedWithUser().getUsername())
-                                  .collect(Collectors.toSet())
-                : Set.of();
+        final Set<String> sharedWithUsernames = note.getShares().stream()
+                .map(share -> share.getSharedWithUser().getUsername())
+                .collect(Collectors.toSet());
+
+        final NoteOwnership ownership = getOwnership(ownerUsername, currentUsername, sharedWithUsernames);
 
         final Set<String> tagNames = note.getTags().stream()
                 .map(TagEntity::getName)
@@ -89,9 +86,18 @@ public interface NoteMapper {
                            .updatedAt(note.getUpdatedAt())
                            .ownerUsername(ownerUsername)
                            .ownership(ownership)
-                           .sharedWith(sharedWithUsernames)
+                           .sharedWithUsernames(sharedWithUsernames)
                            .tags(tagNames)
                            .build();
+    }
+
+    private NoteOwnership getOwnership(String ownerUsername, String currentUsername, Set<String> sharedWithUsernames) {
+        if (!ownerUsername.equals(currentUsername)) {
+            return NoteOwnership.SHARED_WITH_ME;
+        }
+        return sharedWithUsernames.isEmpty()
+                ? NoteOwnership.OWNED :
+                NoteOwnership.SHARED_BY_ME;
     }
 
 }

@@ -1,8 +1,10 @@
 package com.dipa.notefournote.notes;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
+import java.util.Set;
 
 public record ShareNoteRequest(
-        @NotBlank(message = "L'username dell'utente con cui condividere la nota non può essere vuoto.")
-        String username
+        @NotEmpty(message = "La lista di utenti non può essere vuota")
+        Set<String> usernames
 ) {}

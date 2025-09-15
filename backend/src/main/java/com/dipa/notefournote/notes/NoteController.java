@@ -33,10 +33,12 @@ public class NoteController {
 
     private final NoteService noteService;
 
-    @Operation(summary = "Crea una nuova nota")
+    @Operation(summary = "Crea una nuova nota",
+               description = "Crea una nuova nota per l'utente autenticato. È possibile specificare i tag associati e gli username con cui condividere la nota già al momento della creazione.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Nota creata con successo"),
-            @ApiResponse(responseCode = "400", description = "Errore di validazione")
+            @ApiResponse(responseCode = "400", description = "Errore di validazione (es. titolo mancante)"),
+            @ApiResponse(responseCode = "404", description = "Uno degli utenti specificati per la condivisione non è stato trovato")
     })
     @PostMapping
     public ResponseEntity<NoteResponse> createNote(@Valid @RequestBody CreateNoteRequest request,
@@ -130,12 +132,13 @@ public class NoteController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Condivide una nota con un altro utente", description = "Permette al proprietario di una nota di condividerla con un altro utente.")
+    @Operation(summary = "Condivide una nota con uno o più utenti",
+            description = "Permette al proprietario di una nota di condividerla con un set di altri utenti specificati tramite il loro username.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Nota condivisa con successo"),
-            @ApiResponse(responseCode = "400", description = "Errore di validazione (es. condivisione con se stessi)"),
+            @ApiResponse(responseCode = "200", description = "Nota condivisa con successo con tutti gli utenti validi"),
             @ApiResponse(responseCode = "403", description = "Accesso non autorizzato (solo il proprietario può condividere)"),
-            @ApiResponse(responseCode = "404", description = "Nota o utente non trovato")
+            @ApiResponse(responseCode = "404", description = "Nota o uno degli utenti non trovato"),
+            @ApiResponse(responseCode = "409", description = "La nota è già condivisa con uno degli utenti specificati (Conflict)")
     })
     @PostMapping("/{noteId}/share")
     public ResponseEntity<Void> shareNote(
@@ -144,11 +147,11 @@ public class NoteController {
             Authentication authentication) {
 
         final String ownerUsername = authentication.getName();
-        log.debug("Received request from user '{}' to share note '{}' with: '{}'", ownerUsername, noteId, request.username());
+        log.debug("Received request from user '{}' to share note '{}' with: '{}'", ownerUsername, noteId, request.usernames());
 
         noteService.shareNote(noteId, request, ownerUsername);
 
-        log.debug("Successfully shared note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.username());
+        log.debug("Successfully shared note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.usernames());
         return ResponseEntity.ok().build();
     }
 

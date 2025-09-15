@@ -34,10 +34,18 @@ public class SecurityConfig {
                                                    "/actuator/health",
                                                    "/v3/api-docs/**",
                                                    "/swagger-ui.html",
-                                                   "/swagger-ui/**").permitAll()
+                                                   "/swagger-ui/**",
+                                                   "/",
+                                                   "/login",
+                                                   "/dashboard").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/dashboard", true)
+                        .permitAll()
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

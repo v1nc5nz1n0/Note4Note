@@ -2,6 +2,7 @@ package com.dipa.notefournote.notes;
 
 import com.dipa.notefournote.exception.NoteAccessDeniedException;
 import com.dipa.notefournote.exception.NoteNotFoundException;
+import com.dipa.notefournote.exception.UserNotFoundException;
 import com.dipa.notefournote.users.UserEntity;
 import com.dipa.notefournote.users.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,6 @@ public class NoteServiceImpl implements NoteService {
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
     private final NoteMapper noteMapper;
-    private final NoteShareRepository noteShareRepository;
     private final NoteSearchRepository noteSearchRepository;
     private final TagRepository tagRepository;
 
@@ -45,6 +45,22 @@ public class NoteServiceImpl implements NoteService {
                         .orElseGet(() -> tagRepository.saveAndFlush(new TagEntity(tagName))))
                 .collect(Collectors.toSet());
         newNote.setTags(tags);
+
+        // Handling sharing during note creation (filtering out the current user if provided also as target)
+        final Set<NoteShare> noteShares = request.shareWithUsernames().stream()
+                .filter(targetUser -> !username.equals(targetUser))
+                .map(targetUsername -> {
+                    final UserEntity userToShareWith = userRepository.findByUsername(targetUsername)
+                            .orElseThrow(() -> new UserNotFoundException("User '" + targetUsername + "' not found for sharing"));
+
+                    final NoteShare noteShare = new NoteShare();
+                    noteShare.setNote(newNote);
+                    noteShare.setSharedWithUser(userToShareWith);
+
+                    return noteShare;
+                })
+                .collect(Collectors.toSet());
+        newNote.setShares(noteShares);
 
         final NoteEntity savedNote = noteRepository.saveAndFlush(newNote);
         log.info("Note created successfully for user '{}' with id: '{}'", username, savedNote.getId());
@@ -157,34 +173,39 @@ public class NoteServiceImpl implements NoteService {
     @Override
     @Transactional
     public void shareNote(UUID noteId, ShareNoteRequest request, String ownerUsername) {
-        log.info("Sharing note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.username());
+        log.info("Sharing note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.usernames());
 
-        final UserEntity owner = userRepository.findByUsername(ownerUsername)
-                .orElseThrow(() -> new UsernameNotFoundException("Owner user not found: " + ownerUsername));
-
-        final UserEntity userToShareWith = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new UsernameNotFoundException("User to share with not found: " + request.username()));
-
-        final NoteEntity note = noteRepository.findById(noteId)
+        final NoteEntity noteEntity = noteRepository.findById(noteId)
                 .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
 
-        if (!note.getUser().getId().equals(owner.getId())) {
-            throw new NoteAccessDeniedException("Only the owner can share the note");
+        if (!noteEntity.getUser().getUsername().equals(ownerUsername)) {
+            throw new NoteAccessDeniedException("Only owner can share the note");
         }
 
-        if (owner.getId().equals(userToShareWith.getId())) {
-            throw new IllegalArgumentException("You cannot share a note with yourself");
-        }
+        // Handling sharing during note (filtering out the current user if provided also as target and already shared ones)
+        request.usernames().stream()
+                .filter(targetUser -> !ownerUsername.equals(targetUser))
+                .forEach(targetUsername -> {
 
-        final NoteShare shareNote = new NoteShare(note, userToShareWith);
-        note.getShares().add(shareNote);
-        noteShareRepository.save(shareNote);
-        log.debug("Synchronizing share to MongoDB note with id: '{}'", shareNote.getId());
-        final NoteDocument document = noteMapper.toDocument(note);
+                    final UserEntity userToShareWith = userRepository.findByUsername(targetUsername)
+                            .orElseThrow(() -> new UserNotFoundException("User '" + targetUsername + "' not found for sharing"));
+
+                    final boolean alreadyShared = noteEntity.getShares().stream()
+                            .anyMatch(share -> share.getSharedWithUser().equals(userToShareWith));
+
+                    if (!alreadyShared) {
+                        final NoteShare shareNote = new NoteShare(noteEntity, userToShareWith);
+                        noteEntity.getShares().add(shareNote);
+                    }
+                });
+
+        noteRepository.saveAndFlush(noteEntity);
+        log.debug("Synchronizing share to MongoDB note with id: '{}'", noteEntity.getId());
+        final NoteDocument document = noteMapper.toDocument(noteEntity);
         final NoteDocument syncDocument = noteSearchRepository.save(document);
         log.debug("Synchronized share to MongoDB note with id: '{}'", syncDocument.getId());
 
-        log.info("Shared note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.username());
+        log.info("Shared note '{}' from user '{}' to: '{}'", noteId, ownerUsername, request.usernames());
     }
 
     @Override

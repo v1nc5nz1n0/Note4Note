@@ -6,10 +6,23 @@ spring:
       auto-index-creation: true
 
 management:
+  endpoint:
+    health:
+      show-details: always
+      group:
+        readiness:
+          include: db,mongo
+        liveness:
+          include: ping
   endpoints:
     web:
       exposure:
         include: "health"
+  health:
+    db:
+      enabled: true
+    mongo:
+      enabled: true
 
 ---
 # LOCAL
